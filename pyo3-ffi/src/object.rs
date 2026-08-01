@@ -120,7 +120,12 @@ pub struct PyObject {
     #[cfg(PyPy)]
     pub ob_pypy_link: Py_ssize_t,
     pub ob_type: *mut PyTypeObject,
+    pub tracer_ptr: u64,
 }
+
+#[unsafe(no_mangle)]
+#[used]
+pub static __trace_python: [u8; 13] = *b"trace-python\0";
 
 #[cfg(not(all(Py_LIMITED_API, Py_GIL_DISABLED)))]
 const _: () = assert!(core::mem::align_of::<PyObject>() >= _PyObject_MIN_ALIGNMENT);
